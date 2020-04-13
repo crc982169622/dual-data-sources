@@ -1,6 +1,7 @@
 package com.crc.dual.data.sources.service.impl;
 
-import com.crc.dual.data.sources.config.CustomerContextHolder;
+import com.crc.dual.data.sources.annotation.DataSource;
+import com.crc.dual.data.sources.constants.DataSourceType;
 import com.crc.dual.data.sources.dao.UserDao;
 import com.crc.dual.data.sources.domain.User;
 import com.crc.dual.data.sources.service.UserService;
@@ -26,10 +27,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @DataSource(DataSourceType.DATA_SOURCE_ONE)
     public List<User> getList1() {
-        CustomerContextHolder.setCustomerType(CustomerContextHolder.DATA_SOURCE_ONE);
-        List<User> list = userDao.getList();
-        CustomerContextHolder.clearCustomerType();
-        return list;
+        return userDao.getList();
     }
 }

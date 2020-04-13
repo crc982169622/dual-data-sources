@@ -1,15 +1,15 @@
 package com.crc.dual.data.sources.config;
 
+import com.crc.dual.data.sources.annotation.DataSource;
+import com.crc.dual.data.sources.constants.DataSourceType;
+import org.springframework.util.StringUtils;
+
 /**
  * @author: chenrencun
  * @version：
  * @date: 2020/4/12 21:07
  **/
 public class CustomerContextHolder {
-
-    public static final String DATA_SOURCE_DEFAULT = "dataSource";
-
-    public static final String DATA_SOURCE_ONE = "dataSource1";
 
     // 用ThreadLocal来设置当前线程使用哪个dataSource
     private static final ThreadLocal<String> contextHolder = new ThreadLocal<>();
@@ -22,8 +22,8 @@ public class CustomerContextHolder {
     /**获取数据源*/
     public static String getCustomerType() {
         String dataSource = contextHolder.get();
-        if (dataSource.isEmpty()) {
-            return DATA_SOURCE_DEFAULT;
+        if (StringUtils.isEmpty(dataSource)) {
+            return DataSourceType.DATA_SOURCE_DEFAULT.getValue();
         } else {
             return dataSource;
         }

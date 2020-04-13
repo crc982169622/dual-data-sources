@@ -4,10 +4,12 @@
        xmlns:context="http://www.springframework.org/schema/context"
        xmlns:mvc="http://www.springframework.org/schema/mvc"
        xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:aop="http://www.springframework.org/schema/aop"
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.2.xsd
         http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd
         http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-4.3.xsd
-        http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.3.xsd">
+        http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.3.xsd
+        http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.3.xsd">
 
     <!-- 自动扫描 -->
     <context:component-scan base-package="com.crc.dual.data.sources" >
@@ -72,7 +74,7 @@
 
     <!-- spring和MyBatis整合，不需要mybatis的配置映射文件 -->
     <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
-        <property name="dataSource" ref="dataSource" />
+        <property name="dataSource" ref="dynamicDataSource" />
         <!-- 自动扫描mapping.xml文件 -->
         <property name="mapperLocations" value="classpath:mapper/*.xml"></property>
     </bean>
@@ -86,8 +88,16 @@
     <!-- (事务管理)transaction manager, use JtaTransactionManager for global tx -->
     <bean id="transactionManager"
           class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
-        <property name="dataSource" ref="dataSource" />
+        <property name="dataSource" ref="dynamicDataSource" />
     </bean>
 
     <tx:annotation-driven transaction-manager="transactionManager"/>
+
+    <aop:config proxy-target-class="true">
+        <aop:aspect id="dataSourceAspect" ref="dataSourceAop" order="1">
+            <aop:pointcut id="tx" expression="execution(* com..service..*.*(..)) "/>
+            <aop:before pointcut-ref="tx" method="dataSwitch" />
+            <aop:after pointcut-ref="tx" method="clearDataSource"/>
+        </aop:aspect>
+    </aop:config>
 </beans>
