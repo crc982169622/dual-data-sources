@@ -14,4 +14,10 @@ import java.util.List;
 public interface UserDao {
 
     List<User> getList();
+
+    void insert(User user);
+
+    void update(User user);
+
+
 }

@@ -99,4 +99,17 @@ public class User implements Serializable {
     public void setDelFlag(Integer delFlag) {
         this.delFlag = delFlag;
     }
+
+    public User() {
+        super();
+    }
+
+    public User(String userName, String password, String nick, String createUser, Date createDate, Integer delFlag) {
+        this.userName = userName;
+        this.password = password;
+        this.nick = nick;
+        this.createUser = createUser;
+        this.createDate = createDate;
+        this.delFlag = delFlag;
+    }
 }

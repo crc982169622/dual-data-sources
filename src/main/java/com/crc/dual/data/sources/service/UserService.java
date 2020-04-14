@@ -14,4 +14,14 @@ public interface UserService {
     List<User> getList();
 
     List<User> getList1();
+
+    void insert1(User user);
+
+    void insert2(User user);
+
+    void update1(User user);
+
+    void update2(User user);
+
+
 }

@@ -2,6 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <!-- namespace的值就是dao接口的完整路径，就这个demo而言namespace 就是userDao.java的完整路径-->
 <mapper namespace="com.crc.dual.data.sources.dao.UserDao">
+
     <resultMap id="BaseResultMap" type="com.crc.dual.data.sources.domain.User">
         <id column="id" property="id" jdbcType="INTEGER" />
         <result column="user_name" property="userName" jdbcType="VARCHAR" />
@@ -10,9 +11,17 @@
         <result column="del_flag" property="delFlag" jdbcType="INTEGER" />
     </resultMap>
 
+    <sql id="sql_column">
+        id, user_name, password, nick, create_date, create_user, del_flag
+    </sql>
+
     <select id="getList" resultMap="BaseResultMap">
         select * from user where del_flag=0
     </select>
+
+    <insert id="insert" parameterType="com.crc.dual.data.sources.domain.User">
+        insert into user(<include refid="sql_column"/>) values(#{id}, #{userName}, #{password}, #{nick}, #{createDate}, #{createUser}, #{delFlag})
+    </insert>
 
 
 
